@@ -12,40 +12,40 @@ Hoch, Tobias, et al. "Multiplexed imaging mass cytometry of the chemokine milieu
 The core functions uses only ```numpy```, ```pandas```, ```scipy``` and ```skimage```.
 
 ## Usage
-    Input (required):
+### Input (required):
 
-        img_dict: {marker: 2d image}. Input single channel images as a dictionary.
+ - ```img_dict```: {marker: 2d image}. Input single channel images as a dictionary.
 
-        cell_df: dataframe of cell information where each row is a cell.
+ - `cell_df`: dataframe of cell information where each row is a cell.
 
-        cellmask: 2D int ndarray. Image mask of cells. Pixel values should be integers that matches cell ID in cell_df.
+ - `cellmask`: 2D int ndarray. Image mask of cells. Pixel values should be integers that matches cell ID in cell_df.
 
-        boundmask: 2D int ndarray. Image mask of cell boundaries. Pixel values should be integers that matches cell ID in cell_df.
+ - `boundmask`: 2D int ndarray. Image mask of cell boundaries. Pixel values should be integers that matches cell ID in cell_df.
 
-        neighbor_classes: list of neighboring classes. Other classes are not included in the result dataframe, but overlaping 
+ - `neighbor_classes`: list of neighboring classes. Other classes are not included in the result dataframe, but overlaping 
 
-        expressing_markers: list of markers that are expressed in the center cell types. Their background level will be calculated as the average level in other cell types. All other markers that are not listed but included in img_dict will be treated as expressed in the center cell types and their background level will be calculated as the average level in center cell types.
+ - `expressing_markers`: list of markers that are expressed in the center cell types. Their background level will be calculated as the average level in other cell types. All other markers that are not listed but included in img_dict will be treated as expressed in the center cell types and their background level will be calculated as the average level in center cell types.
 
-    Input (optional):
-        cell list: list of cell IDs of center cells to compute CISA. If None, all cells are considered.
+### Input (optional):
+ - `cell_list`: list of cell IDs of center cells to compute CISA. If None, all cells are considered.
 
-        target_classes: list of center cell types. Default: ['T'].
+ - `target_classes`: list of center cell types. Default: `['T']`.
 
-        n_bootstrap: number of bootstraps for the null model. Default: 1000
+ - `n_bootstrap`: number of bootstraps for the null model. Default: 1000
 
-        e_width: width of dilation to calculate overlapping. Default: 2 pixels.
+- `e_width`: width of dilation to calculate overlapping. Default: 2 pixels.
 
-        bound_width: width of cell boundary dilation width before calculating overlapping. 0 = use raw bound. Default: 0 pixel.
+ - `bound_width`: width of cell boundary dilation width before calculating overlapping. 0 = use raw bound. Default: 0 pixel.
 
-        dropna: Bool, if drops invalid synapses. Default: True
+ - `dropna`: Bool, if drops invalid synapses. Default: True
 
-        class_col: the colname for the cell type column in cell_df. Default: 'Class'
+ - `class_col`: the colname for the cell type column in cell_df. Default: 'Class'
 
-        cell_id_col: the colname for the cell ID column in cell_df. Default: 'Cell'
+ - `cell_id_col`: the colname for the cell ID column in cell_df. Default: 'Cell'
 
-        keep_cols: list of colnames that should be kept in the output dataframe. Default: []
-        
-        excluded: list of cell between which and the center cells the contacted regions should be completely ignored in calculation. One example is to reduce the influence of signals from neighboring same type of cells. Default: ['T'].
+ - `keep_cols`: list of colnames that should be kept in the output dataframe. Default: []
+
+ - `excluded`: list of cell between which and the center cells the contacted regions should be completely ignored in calculation. One example is to reduce the influence of signals from neighboring same type of cells. Default: `['T']`.
 
     
 ## Output

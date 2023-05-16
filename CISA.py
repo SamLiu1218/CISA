@@ -24,7 +24,7 @@ def CISA(img_dict, cell_df, cellmask, boundmask, neighbor_classes, expressing_ma
         expressing_markers: list of markers that are expressed in the center cell types. Their background level will be calculated as the average level in other cell types. All other markers that are not listed but included in img_dict will be treated as expressed in the center cell types and their background level will be calculated as the average level in center cell types.
 
     Input (optional):
-        cell list: list of cell IDs of center cells to compute CISA. If None, all cells are considered.
+        cell_list: list of cell IDs of center cells to compute CISA. If None, all cells are considered.
 
         target_classes: list of center cell types. Default: ['T'].
 
