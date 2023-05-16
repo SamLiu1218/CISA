@@ -9,18 +9,20 @@ Hoch, Tobias, et al. "Multiplexed imaging mass cytometry of the chemokine milieu
 
 ## Dependency
 
-The core functions uses only ```numpy```, ```pandas```, ```scipy``` and ```skimage```.
+The core functions use only ```numpy```, ```pandas```, ```scipy``` and ```skimage```.
+
+This package takes pixelated masks for cell segmentation and cell boundaries. However, it is recommanded to use `shapely` and `rasterio` to manipulate vectorized cell masks (not demonstrated).
 
 ## Usage
 ### Input (required):
 
  - ```img_dict```: {marker: 2d image}. Input single channel images as a dictionary.
 
- - `cell_df`: dataframe of cell information where each row is a cell.
+ - `cell_df`: dataframe of cell information where each row is a cell. The only required columns are cell_id and cell_type, with colnames customizable as optional input.
 
- - `cellmask`: 2D int ndarray. Image mask of cells. Pixel values should be integers that matches cell ID in cell_df.
+ - `cellmask`: 2D int ndarray. Image mask of cells. Pixel values should be **integers** that matches the cell IDs in `cell_df`.
 
- - `boundmask`: 2D int ndarray. Image mask of cell boundaries. Pixel values should be integers that matches cell ID in cell_df.
+ - `boundmask`: 2D int ndarray. Image mask of cell boundaries. Pixel values should be integers that matches cell ID in `cell_df`.
 
  - `neighbor_classes`: list of neighboring classes. Other classes are not included in the result dataframe, but overlaping 
 
@@ -39,11 +41,11 @@ The core functions uses only ```numpy```, ```pandas```, ```scipy``` and ```skima
 
  - `dropna`: Bool, if drops invalid synapses. Default: True
 
- - `class_col`: the colname for the cell type column in cell_df. Default: 'Class'
+ - `class_col`: the colname for the cell type column in `cell_df`. Default: 'Class'
 
- - `cell_id_col`: the colname for the cell ID column in cell_df. Default: 'Cell'
+ - `cell_id_col`: the colname for the cell ID column in `cell_df`. Default: 'Cell'
 
- - `keep_cols`: list of colnames that should be kept in the output dataframe. Default: []
+ - `keep_cols`: list of colnames that should be kept in the output dataframe. Default: `[]`
 
  - `excluded`: list of cell between which and the center cells the contacted regions should be completely ignored in calculation. One example is to reduce the influence of signals from neighboring same type of cells. Default: `['T']`.
 

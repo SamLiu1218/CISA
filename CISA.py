@@ -13,7 +13,7 @@ def CISA(img_dict, cell_df, cellmask, boundmask, neighbor_classes, expressing_ma
 
         img_dict: {marker: 2d image}. Input single channel images as a dictionary.
 
-        cell_df: dataframe of cell information where each row is a cell.
+        cell_df: dataframe of cell information where each row is a cell. The only required columns are cell_id and cell_type, with colnames customizable as optional input. 
 
         cellmask: 2D int ndarray. Image mask of cells. Pixel values should be integers that matches cell ID in cell_df.
 
