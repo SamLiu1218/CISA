@@ -1,5 +1,9 @@
 # CISA
  Computational Immune Synapse Analysis.
+ 
+## Installation
+
+This is a py script that can be imported. To use, copy the CISA.py to your working directory.
 
 ## Example
 
@@ -9,7 +13,7 @@ Hoch, Tobias, et al. "Multiplexed imaging mass cytometry of the chemokine milieu
 
 ## Dependency
 
-The core functions use only ```numpy```, ```pandas```, ```scipy``` and ```skimage```.
+This is a Python 3 package. The core functions use only ```numpy```, ```pandas```, ```scipy``` and ```skimage```.
 
 This package takes pixelated masks for cell segmentation and cell boundaries. However, it is recommanded to use `shapely` and `rasterio` to manipulate vectorized cell masks (not demonstrated).
 
