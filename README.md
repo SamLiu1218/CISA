@@ -3,7 +3,7 @@
  
 ## Installation
 
-This is a py script that can be imported. To use, copy the CISA.py to your working directory.
+This is a py script that can be imported. To use, copy the CISA.py to your working directory. 
 
 ## Example
 
@@ -67,8 +67,10 @@ For each marker ```m``` in the input, there will be several columns:
 
 ```{m}_z``` and ```{m}_p```: The z-score and p-value for the observed synapse strength under the null model.
 
-## Note
+## Notes and other information
 
 Image preprocessing, such as de-noising, signal transformation and normalization, is determined by the user. 
 
-A large bootstrap number may significantly increase the running time. In most cases, the CISA score (as in ```{m}_CISA``` column) is sufficient to characterize the behaviour.
+The running time varies by computation power but the example data can be run within 30 mins with the default parameters. A large bootstrap number may significantly increase the running time. In most cases, the CISA score (as in ```{m}_CISA``` column) is sufficient to characterize the behaviour.
+
+The code have been tested on CentOS Linux 7, Windows 11 and macOS 13.4.
