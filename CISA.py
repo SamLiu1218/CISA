@@ -70,8 +70,8 @@ def CISA(img_dict, cell_df, cellmask, boundmask, neighbor_classes, expressing_ma
     n_nancelltype = np.sum(cell_df[class_col].isna())
     
     if n_nancelltype > 0:
-        warnings.warn(f"{n_nancelltype} cells have NaN cell types. Removed from analysis.")
-        cell_df = cell_df.loc(~cell_df[class_col].isna()).copy()
+        warnings.warn(f"{n_nancelltype} cells have NaN cell types. NOT removed from analysis.")
+        # cell_df = cell_df.loc(~cell_df[class_col].isna()).copy()
         
     # presence of asked cell types
     if np.sum(cell_df[class_col].isin(target_classes)) == 0:
