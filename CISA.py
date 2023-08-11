@@ -59,8 +59,8 @@ def CISA(img_dict, cell_df, cellmask, boundmask, neighbor_classes, expressing_ma
         if m in cell_df.columns:
             continue
         else:
-            keeps_cols = [c for c in keeps_cols if c != m]
-            warnings.warning(f"{m} is in keeps_cols but not provided in cell_df. Removed from keeps_cols.")
+            keep_cols = [c for c in keep_cols if c != m]
+            warnings.warning(f"{m} is in keep_cols but not provided in cell_df. Removed from keep_cols.")
 
     # cells with missing cell types
     n_nancelltype = np.sum(cell_df[class_col].isna())
