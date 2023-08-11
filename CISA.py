@@ -224,7 +224,7 @@ def CISA(img_dict, cell_df, cellmask, boundmask, neighbor_classes, expressing_ma
                 
                 dict_new[f'{m}_p'] = scipy.stats.norm.sf(abs(dict_new[f'{m}_z']))
 
-            syn_df = syn_df.append(dict_new, ignore_index=1)
+            syn_df = pd.concat([syn_df, pd.DataFrame(dict_new, index = [0])], ignore_index=1)
     if dropna:
         return syn_df.dropna()
     else:
