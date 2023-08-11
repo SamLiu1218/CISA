@@ -56,7 +56,7 @@ def CISA(img_dict, cell_df, cellmask, boundmask, neighbor_classes, expressing_ma
 
     # keeps_cols presence
     for m in keep_cols:
-        if m isin(cell_df.columns):
+        if m in cell_df.columns:
             continue
         else:
             keeps_cols = [c for c in keeps_cols if c != m]
