@@ -233,7 +233,7 @@ def CISA(img_dict, cell_df, cellmask, boundmask, neighbor_classes, expressing_ma
             syn_df = pd.concat([syn_df, pd.DataFrame(dict_new, index = [0])], ignore_index=1)
 
     if n_missing > 0:
-        warnings.warning(f"{n_missing} cells do not have matching cell masks.")
+        warnings.warning(f"{n_missing} cells do not have matching boundary masks.")
     if dropna:
         return syn_df.dropna()
     else:
