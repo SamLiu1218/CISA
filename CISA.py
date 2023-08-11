@@ -117,9 +117,11 @@ def CISA(img_dict, cell_df, cellmask, boundmask, neighbor_classes, expressing_ma
     # </ cell list >
 
     # main
+    n_missing = 0
     for cell_id in cell_list:
         # skip non existing cell id
         if np.sum(boundmask == cell_id) == 0:
+            n_missing += 1
             continue
 
         # < neighbor list >
@@ -229,6 +231,9 @@ def CISA(img_dict, cell_df, cellmask, boundmask, neighbor_classes, expressing_ma
                 dict_new[f'{m}_p'] = scipy.stats.norm.sf(abs(dict_new[f'{m}_z']))
 
             syn_df = pd.concat([syn_df, pd.DataFrame(dict_new, index = [0])], ignore_index=1)
+
+    if n_missing > 0:
+        warnings.warning(f"{n_missing} cells do not have matching cell masks.")
     if dropna:
         return syn_df.dropna()
     else:
