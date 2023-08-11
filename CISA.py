@@ -4,6 +4,10 @@ import scipy
 from skimage import morphology
 import warnings
 
+def my_formatwarning(msg, *args, **kwargs):
+    return f"Warning: {msg}\n"
+warnings.formatwarning = my_formatwarning
+
 def CISA(img_dict, cell_df, cellmask, boundmask, neighbor_classes, expressing_markers, cell_list = None, target_classes = ['T'], n_bootstraps = 1000, e_width = 2, bound_width = 0, dropna=True, class_col = 'Class', cell_id_col = 'Cell', keep_cols = ['Intratumoral'], excluded = ['T']):
     """
     Calculates CISA scores between given center cell types and their neighboring cell types for given markers. The default inputs are for calculating synapses between T cells and neighboring cells. Make sure to check all input arguments if applied to other cell types.
