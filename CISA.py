@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import scipy
 from skimage import morphology
+import warnings
 
 def CISA(img_dict, cell_df, cellmask, boundmask, neighbor_classes, expressing_markers, cell_list = None, target_classes = ['T'], n_bootstraps = 1000, e_width = 2, bound_width = 0, dropna=True, class_col = 'Class', cell_id_col = 'Cell', keep_cols = ['Intratumoral'], excluded = ['T']):
     """
@@ -19,7 +20,7 @@ def CISA(img_dict, cell_df, cellmask, boundmask, neighbor_classes, expressing_ma
 
         boundmask: 2D int ndarray. Image mask of cell boundaries. Pixel values should be integers that matches cell ID in cell_df.
 
-        neighbor_classes: list of neighboring classes. Other classes are not included in the result dataframe, but overlaping 
+        neighbor_classes: list of neighboring classes. Other classes are not included in the result dataframe, but overlaping areas are still considered as non-contacting areas.
 
         expressing_markers: list of markers that are expressed in the center cell types. Their background level will be calculated as the average level in other cell types. All other markers that are not listed but included in img_dict will be treated as expressed in the center cell types and their background level will be calculated as the average level in center cell types.
 
@@ -38,7 +39,7 @@ def CISA(img_dict, cell_df, cellmask, boundmask, neighbor_classes, expressing_ma
 
         class_col: the colname for the cell type column in cell_df. Default: 'Class'
 
-        cell_id_col: the colname for the cell ID column in cell_df. Default: 'Cell'
+        cell_id_col: the colname for the cell ID column in cell_df that matches the cell IDs in the masks. Default: 'Cell'
 
         keep_cols: list of colnames that should be kept in the output dataframe. Default: []
         
@@ -46,21 +47,56 @@ def CISA(img_dict, cell_df, cellmask, boundmask, neighbor_classes, expressing_ma
 
     """
 
+    cell_df = cell_df.copy()
+    # < checks >
+    # cell_id_col dtype
+    if cell_df[cell_id_col].dtype != int:
+        warnings.warning(f"Cell IDs in cell_df[{cell_df_col}] are not integers. Converted to integers.")
+        cell_df[cell_id_col] = cell_df[cell_id_col].astype(int)
+
+    # keeps_cols presence
+    for m in keep_cols:
+        if m isin(cell_df.columns):
+            continue
+        else:
+            keeps_cols = [c for c in keeps_cols if c != m]
+            warnings.warning(f"{m} is in keeps_cols but not provided in cell_df. Removed from keeps_cols.")
+
+    # cells with missing cell types
+    n_nancelltype = np.sum(cell_df[class_col].isna())
+    
+    if n_nancelltype > 0:
+        warnings.warning(f"{n_nancelltype} cells have NaN cell types. Removed from analysis.")
+        cell_df = cell_df.loc(~cell_df[class_col].isna()).copy()
+        
+    # presence of asked cell types
+    if np.sum(cell_df[class_col].isin(target_classes)) == 0:
+        warnings.warning("None of target_classes is present in the data")
+
+
+    if np.sum(cell_df[class_col].isin(neighbor_classes)) == 0:
+        warnings.warning("None of neighbor_classes is present in the data")           
+        
+    
+    # < /checks >
+
     markers = list(img_dict.keys())
+
     # < bgl >
-    valarr = cell_df[class_col].isin(target_classes).values
-    valarr_T = np.append([0], valarr)
-    mask_T = valarr_T[cellmask]
-    valarr_nonT = np.append([0], np.logical_not(valarr))
-    mask_nonT = valarr_nonT[cellmask]
+    valarr = np.zeros(cellmask.max() + 1, dtype = int)
+    valarr[cell_df.loc[cell_df[class_col].isin(target_classes), cell_id_col].values] = 1 # T
+    valarr[cell_df.loc[~cell_df[class_col].isin(target_classes), cell_id_col].values] = -1 # non T 
+    mask_T = valarr[cellmask] == 1
+    mask_nonT = valarr[cellmask] == 1
 
     bgl_dict = {}
     for m in markers:
         if m in expressing_markers:
-            bgl_dict[m] = np.sum(img_dict[m]*mask_nonT)/np.sum(mask_nonT)
+            bgl_dict[m] = np.sum(img_dict[m][mask_nonT])/np.sum(mask_nonT)
         else:
-            bgl_dict[m] = np.sum(img_dict[m]*mask_T)/np.sum(mask_T)
-
+            bgl_dict[m] = np.sum(img_dict[m][mask_T])/np.sum(mask_T)
+        if bgl_dict[m] <= 0:
+            warnings.warning(f"{m} has a background level of bgl_dict[m].")
     # </ bgl >
 
     # < init >
@@ -180,8 +216,11 @@ def CISA(img_dict, cell_df, cellmask, boundmask, neighbor_classes, expressing_ma
                 dict_new[f'{m}_miu'] = null_df.at[m, 'miu']
                 
                 dict_new[f'{m}_sigma'] = null_df.at[m, 'sigma']
-                
-                dict_new[f'{m}_z'] = (dict_new[f'{m}_CISA'] - dict_new[f'{m}_miu'])/dict_new[f'{m}_sigma']
+
+                if dict_new[f'{m}_sigma'] > 0:
+                    dict_new[f'{m}_z'] = (dict_new[f'{m}_CISA'] - dict_new[f'{m}_miu'])/dict_new[f'{m}_sigma']
+                else: 
+                    dict_new[f'{m}_z'] = 0
                 
                 dict_new[f'{m}_p'] = scipy.stats.norm.sf(abs(dict_new[f'{m}_z']))
 
@@ -302,5 +341,5 @@ def calculate_CISA(img, mask_c, mask_nc, bgl):
         val_c = np.minimum(bgl, val_nc)
     else:
         val_c = sum_c/area_c
-        
+
     return np.log2(np.array(val_c/val_nc, dtype='float32'))
