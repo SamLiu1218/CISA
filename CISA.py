@@ -51,7 +51,7 @@ def CISA(img_dict, cell_df, cellmask, boundmask, neighbor_classes, expressing_ma
     # < checks >
     # cell_id_col dtype
     if cell_df[cell_id_col].dtype != int:
-        warnings.warning(f"Cell IDs in cell_df[{cell_df_col}] are not integers. Converted to integers.")
+        warnings.warn(f"Cell IDs in cell_df[{cell_df_col}] are not integers. Converted to integers.")
         cell_df[cell_id_col] = cell_df[cell_id_col].astype(int)
 
     # keeps_cols presence
@@ -60,22 +60,22 @@ def CISA(img_dict, cell_df, cellmask, boundmask, neighbor_classes, expressing_ma
             continue
         else:
             keep_cols = [c for c in keep_cols if c != m]
-            warnings.warning(f"{m} is in keep_cols but not provided in cell_df. Removed from keep_cols.")
+            warnings.warn(f"{m} is in keep_cols but not provided in cell_df. Removed from keep_cols.")
 
     # cells with missing cell types
     n_nancelltype = np.sum(cell_df[class_col].isna())
     
     if n_nancelltype > 0:
-        warnings.warning(f"{n_nancelltype} cells have NaN cell types. Removed from analysis.")
+        warnings.warn(f"{n_nancelltype} cells have NaN cell types. Removed from analysis.")
         cell_df = cell_df.loc(~cell_df[class_col].isna()).copy()
         
     # presence of asked cell types
     if np.sum(cell_df[class_col].isin(target_classes)) == 0:
-        warnings.warning("None of target_classes is present in the data")
+        warnings.warn("None of target_classes is present in the data")
 
 
     if np.sum(cell_df[class_col].isin(neighbor_classes)) == 0:
-        warnings.warning("None of neighbor_classes is present in the data")           
+        warnings.warn("None of neighbor_classes is present in the data")           
         
     
     # < /checks >
@@ -96,7 +96,7 @@ def CISA(img_dict, cell_df, cellmask, boundmask, neighbor_classes, expressing_ma
         else:
             bgl_dict[m] = np.sum(img_dict[m][mask_T])/np.sum(mask_T)
         if bgl_dict[m] <= 0:
-            warnings.warning(f"{m} has a background level of bgl_dict[m].")
+            warnings.warn(f"{m} has a background level of bgl_dict[m].")
     # </ bgl >
 
     # < init >
