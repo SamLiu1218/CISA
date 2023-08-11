@@ -235,6 +235,9 @@ def CISA(img_dict, cell_df, cellmask, boundmask, neighbor_classes, expressing_ma
     if n_missing > 0:
         warnings.warning(f"{n_missing} cells do not have matching boundary masks.")
     if dropna:
+        n_na = np.sum(syn_df.isna().sum(axis=1)>0)
+        if n_na>0:
+            warnings.warn(f"{n_na} lines contain NaN and are removed.")
         return syn_df.dropna()
     else:
         return syn_df
