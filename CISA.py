@@ -55,7 +55,7 @@ def CISA(img_dict, cell_df, cellmask, boundmask, neighbor_classes, expressing_ma
     # < checks >
     # cell_id_col dtype
     if cell_df[cell_id_col].dtype != int:
-        warnings.warn(f"Cell IDs in cell_df[{cell_df_col}] are not integers. Converted to integers.")
+        warnings.warn(f"Cell IDs in cell_df[{cell_id_col}] are not integers. Converted to integers.")
         cell_df[cell_id_col] = cell_df[cell_id_col].astype(int)
 
     # keeps_cols presence
