@@ -1,5 +1,7 @@
 # CISA
  Computational Immune Synapse Analysis.
+ <img width="992" alt="Screenshot 2025-04-15 at 9 31 23 AM" src="https://github.com/user-attachments/assets/ebf77a86-7578-4570-bb32-a92348cbbfc5" />
+
  
 ## Installation
 
